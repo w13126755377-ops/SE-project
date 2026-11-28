@@ -1,5 +1,6 @@
 import sqlite3
 import threading
+from datetime import date
 
 from fastapi import FastAPI, Query
 
@@ -8,6 +9,8 @@ from src.import_service import import_enterprises, import_policies, import_statu
 from src.leadership_service import diagnose_shortages
 from src.query_service import enterprise_profile, list_enterprises, match_policies, segment_coverage
 from src.schemas import EnterpriseImportRequest, PolicyImportRequest
+from src.scoring.engine import rules as scoring_rules
+from src.scoring.service import rank_enterprises, score_one
 
 app = FastAPI(title="链式智能招商推荐系统 数据服务")
 
@@ -30,6 +33,33 @@ def _ok(data):
 @app.get("/api/v1/health")
 def health():
     return _ok({"status": "up"})
+
+
+@app.get('/api/v1/scoring/rules')
+def score_rules():
+    return _ok(scoring_rules())
+
+
+@app.get('/api/v1/scoring/rankings')
+def rankings(target_segment: str = Query(..., min_length=1), keyword: str = Query(None),
+             page: int = Query(1, ge=1), page_size: int = Query(20, ge=1, le=100),
+             as_of: date = Query(None)):
+    try:
+        return _ok(rank_enterprises(target_segment, keyword, page, page_size, as_of))
+    except ValueError as error:
+        return {'code': 400, 'message': str(error), 'data': None}
+
+
+@app.get('/api/v1/enterprises/{enterprise_id}/score')
+def enterprise_score(enterprise_id: int, target_segment: str = Query(..., min_length=1),
+                     as_of: date = Query(None)):
+    try:
+        data = score_one(enterprise_id, target_segment, as_of)
+    except ValueError as error:
+        return {'code': 400, 'message': str(error), 'data': None}
+    if data is None:
+        return {'code': 404, 'message': '企业不存在', 'data': None}
+    return _ok(data)
 
 
 @app.post("/api/v1/data/enterprises/import")

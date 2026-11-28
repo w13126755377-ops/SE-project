@@ -21,4 +21,10 @@ Source-derived GSAP/Lenis timings and reconstructed effects; source implementati
 
 ## Future pages
 
-Operate pages reuse tokens and controls. Do not apply homepage scene-wheel interception to tables, forms or enterprise detail views. Use `/api/v1` client, honest missing values and explicit error/loading/empty states. Current role pages are connection-ready scaffolds, not completed business modules.
+Operate pages reuse tokens and controls. Do not apply homepage scene-wheel interception to tables, forms or enterprise detail views. Use `/api/v1` client, honest missing values and explicit error/loading/empty states. The specialist page implements search, deterministic scoring and enterprise detail. Leadership and planning remain scaffolds.
+
+## Specialist surface
+
+A full white search viewport precedes black results. ScrollTrigger interpolates the entire local page background from40% to65% of the first viewport; no static gradient band or scroll snapping. Search uses a standard magnifier and adjacent blue arrow/rules buttons, with no hover color change. Sector choices remain visible as a compact navigation row.
+
+Company cards preserve title/arrow, short sector description, breathing room, then logo/score. On entering the viewport cards rise52px with stagger; hovering raises8px and reveals a3px blue rule from10% to100% over0.45s. Only the top-right arrow opens details. Details use separated sections, horizontal score bars, an open investment timeline and a single wrapping city row. Rule explanation uses formal headings, muted body copy and small blue square section markers.

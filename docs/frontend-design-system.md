@@ -1,6 +1,6 @@
 # 前端组件、视觉与动效交接 v0.1
 
-本次交付是 Vue 3 前端底座与总览页。三个业务看板、D4 评分和 D5 方案不在此版本中伪装为已实现。
+共享框架与总览页由框架分支提供。当前业务分支新增招商专员看板与D4评分；D1/D5及另两个业务看板仍待各自负责人开发。
 
 ## 1. 视觉规范
 
@@ -35,7 +35,7 @@ import { getEnterprises } from '../api/client'
 const page = await getEnterprises({ chain_segment: '先进封装', page: 1 })
 ```
 
-接口参数遵循数据岗契约。D4新接口应另写契约，不把评分塞入数据岗画像接口。Workspace 骨架只读取 A3 导入状态用于显示真实连接结果。
+接口参数遵循数据岗契约。D4接口契约见 `scoring-engine.md`，业务接口与画像保持独立，不把评分塞入数据岗画像接口。Workspace 骨架只读取 A3 导入状态用于显示真实连接结果。
 
 ## 4. 代码级参考与实现映射
 
@@ -47,7 +47,7 @@ const page = await getEnterprises({ chain_segment: '先进封装', page: 1 })
 
 | 原站机制 | 本项目实现 | 范围 |
 | --- | --- | --- |
-| `initArrowReveal`：背景scaleX从0到1，原点0%50%，0.4s expo.out；文字y=-100%，stagger0.01s | `RevealLink` + `FlipText`，CSS等效缓动与逐字延迟；箭头补充翻转进入 | 鼠标、键盘焦点都可触发；整张卡片hover也展开CTA |
+| `initArrowReveal`：背景scaleX从0到1，原点0%50%，0.4s expo.out；文字y=-100%，stagger0.01s | `RevealLink` + `FlipText`，CSS等效缓动与逐字延迟；箭头保持原形，背景展开配合逐字翻转 | 鼠标、键盘焦点都可触发；整张卡片hover也展开CTA |
 | `shuffleHover`：固定字符宽度后置换字符，避免文字抖动 | 导航使用固定宽度字符扰动与原始十字SVG旋转 | 按原站字符更新与错位节奏重建，最终恢复中文 |
 | Lenis `lerp:.12`，GSAP ticker联动 | `useOverviewMotion` 同步ticker、ScrollTrigger | 仅总览页；路由销毁，不污染其他看板 |
 | 首页暂停/播放/释放3D场景，非简单CSS scroll-snap | 仅保留连续平滑滚动、Hero视差和入场动画；按用户要求取消分区卡点 | 适配已确认的三段总览；没有复制原站无关3D视频和长剧情 |
